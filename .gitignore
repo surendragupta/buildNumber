@@ -1,0 +1,56 @@
+# Operating System Files
+
+*.DS_Store
+Thumbs.db
+.#*
+*#
+*~
+.*
+
+# Build Files #
+
+bin
+target
+build
+.gradle
+*.jar
+
+
+# Eclipse Project Files #
+
+.classpath
+.project
+.settings
+
+# STS Project Files #
+
+.springBeans
+
+# IntelliJ IDEA Files #
+
+*.iml
+*.ipr
+*.iws
+*.idea
+
+# Log Files #
+
+log
+*.log*
+
+# Exceptions #
+!/.gitignore
+!/.travis.yml
+!/gradle/wrapper/*.jar
+!/libs/*.jar
+/bin
+/gage.tmp
+/gage.lck
+/gage.script
+/gage.properties
+/gage.log
+
+# Javascript #
+node_modules
+bower_component
+src/test/javascript_specs/coverage

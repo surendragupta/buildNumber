@@ -1,0 +1,103 @@
+buildscript {
+    ext {
+        springBootVersion = '1.2.6.RELEASE'
+		jaywayVersion = '2.0.0'
+    }
+    repositories {
+        mavenCentral()
+		mavenLocal()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE') 
+        classpath('org.flywaydb:flyway-gradle-plugin:3.2.1')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'spring-boot' 
+apply plugin: 'war'
+apply plugin: 'jacoco'
+apply plugin: 'org.flywaydb.flyway'
+
+war {
+    baseName = 'provision'
+}
+
+jar {
+    baseName = 'gage-provision-tool'
+    version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+	mavenLocal()
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-configuration-processor')
+    compile('org.springframework.boot:spring-boot-starter-aop')
+    compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework:spring-context-support:4.2.1.RELEASE')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.postgresql:postgresql:9.4-1203-jdbc4')
+	compile('org.hsqldb:hsqldb:2.3.3')
+	compile('org.apache.poi:poi:3.12')
+	compile('org.apache.poi:poi-ooxml:3.12')
+	compile('org.apache.poi:poi-scratchpad:3.12')
+	compile('io.jsonwebtoken:jjwt:0.5.1')
+	compile('org.apache.poi:poi-ooxml-schemas:3.12')	
+	compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.6.2")
+	compile("org.codehaus.woodstox:woodstox-core-asl:4.4.1")
+	compile('net.sf.ehcache:ehcache:2.10.0')
+	compile('com.mashape.unirest:unirest-java:1.4.5')
+	compile('org.apache.commons:commons-lang3:3.4')
+	compile('com.sinet.gage:gage-dlap-utils:0.1.0')
+    testCompile('org.springframework.boot:spring-boot-starter-test') 
+    testCompile('com.jayway.jsonpath:json-path:2.0.0')
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+    
+}
+eclipse {
+    classpath {
+         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
+}
+
+test {
+	testLogging.showStandardStreams = true
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/gage'
+    user = 'gage_admin'
+    password = 'P@ssw0rd'
+    locations=['filesystem:src/main/db/migration']
+}
+
+
+jacocoTestReport {
+    group = "reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
